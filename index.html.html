@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sushi Factory · Pedí por WhatsApp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --negro:#141210; --negro-2:#1D1A17; --negro-3:#272320;
+    --amarillo:#F5C518; --amarillo-2:#FFD84A;
+    --rojo:#E4322B; --rojo-d:#B8241E;
+    --crema:#FBF7EC; --gris:#A79E92; --linea:#38322C;
+    --wa:#25D366; --wa-d:#128C7E;
+    --ok:#7FB63A;
+    --display:'Anton',system-ui,sans-serif; --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:var(--body);background:var(--negro);color:var(--crema);-webkit-font-smoothing:antialiased;padding-bottom:90px}
+  .wrap{max-width:540px;margin:0 auto;min-height:100vh}
+  em{font-style:normal;color:var(--amarillo)}
+
+  /* Header */
+  header{position:sticky;top:0;z-index:30;background:linear-gradient(90deg,var(--amarillo),var(--amarillo-2));color:var(--negro);border-bottom:4px solid var(--negro)}
+  .bar{display:flex;align-items:center;gap:12px;padding:12px 16px;max-width:540px;margin:0 auto}
+  .seal{font-family:var(--display);background:var(--negro);color:var(--amarillo);padding:6px 11px;border-radius:8px;font-size:19px;transform:skewX(-6deg);letter-spacing:.4px;line-height:1}
+  .seal span{color:var(--rojo)}
+  .brand{display:flex;flex-direction:column;line-height:1.1}
+  .brand b{font-size:15px;font-weight:800;letter-spacing:.2px}
+  .brand span{font-size:11px;font-weight:600;opacity:.72}
+  .bar .open{margin-left:auto;font-size:11px;font-weight:800;background:var(--negro);color:var(--ok);padding:5px 10px;border-radius:20px;display:flex;align-items:center;gap:6px}
+  .bar .open::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(127,182,58,.3)}
+
+  /* Hero */
+  .hero{padding:22px 16px 14px}
+  .hero h1{font-family:var(--display);font-size:30px;line-height:1.02;text-transform:uppercase;letter-spacing:.4px}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;background:var(--negro-2);border:1px solid var(--linea);color:var(--crema);padding:7px 12px;border-radius:20px}
+  .pill b{color:var(--amarillo);font-weight:800}
+
+  /* Nav chips */
+  nav{position:sticky;top:57px;z-index:20;background:var(--negro);padding:10px 0;border-bottom:1px solid var(--linea)}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding:0 16px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chip{white-space:nowrap;font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:20px;background:var(--negro-3);color:var(--gris);border:1.5px solid transparent;cursor:pointer}
+  .chip.on{background:var(--amarillo);color:var(--negro)}
+
+  /* Menu */
+  main{padding:6px 16px 10px}
+  .cat{padding:22px 0 6px}
+  .cat h2{font-family:var(--display);font-size:20px;text-transform:uppercase;letter-spacing:.6px;color:var(--amarillo)}
+  .cat .sub{font-size:12px;color:var(--gris);margin-top:2px}
+  .item{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--linea)}
+  .item .info{flex:1;min-width:0}
+  .item .n{font-weight:700;font-size:15px}
+  .item .d{font-size:12.5px;color:var(--gris);line-height:1.35;margin-top:3px}
+  .item .p{font-family:var(--display);font-size:17px;color:var(--crema);margin-top:6px;letter-spacing:.3px}
+  .item .p.consulta{font-family:var(--body);font-size:12px;font-weight:700;color:var(--amarillo);background:var(--negro-3);padding:4px 8px;border-radius:6px;display:inline-block}
+  .ctrl{flex-shrink:0;display:flex;align-items:center}
+  .addbtn{background:var(--rojo);color:#fff;border:none;width:38px;height:38px;border-radius:11px;font-size:22px;font-weight:700;cursor:pointer;display:grid;place-items:center;box-shadow:0 4px 12px rgba(228,50,43,.35)}
+  .addbtn:active{transform:scale(.94)}
+  .stepper{display:flex;align-items:center;gap:10px;background:var(--negro-3);border:1.5px solid var(--rojo);border-radius:11px;padding:3px}
+  .stepper button{background:transparent;border:none;color:var(--amarillo);width:30px;height:32px;font-size:20px;font-weight:700;cursor:pointer}
+  .stepper .q{font-weight:800;font-size:15px;min-width:16px;text-align:center;color:#fff}
+
+  /* FAQ */
+  .faq{padding:26px 16px 8px}
+  .faq h2{font-family:var(--display);font-size:20px;text-transform:uppercase;color:var(--amarillo);letter-spacing:.6px;margin-bottom:12px}
+  .qitem{border:1px solid var(--linea);border-radius:12px;margin-bottom:9px;overflow:hidden;background:var(--negro-2)}
+  .qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 15px;cursor:pointer;font-weight:700;font-size:14px}
+  .qhead .ic{color:var(--amarillo);font-size:20px;font-weight:700;transition:.2s;flex-shrink:0}
+  .qitem.open .ic{transform:rotate(45deg)}
+  .qbody{max-height:0;overflow:hidden;transition:max-height .25s ease}
+  .qitem.open .qbody{max-height:400px}
+  .qbody p{padding:0 15px 15px;font-size:13.5px;color:var(--crema);line-height:1.5}
+  .askbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:6px;background:var(--negro-3);border:1.5px solid var(--wa);color:var(--wa);font-weight:800;font-size:14px;padding:13px;border-radius:12px;cursor:pointer}
+
+  footer{padding:26px 16px 30px;text-align:center;color:var(--gris);font-size:11.5px;line-height:1.6;border-top:1px solid var(--linea);margin-top:18px}
+  footer b{color:var(--crema)}
+
+  /* Floating cart */
+  .cartbar{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:12px 16px calc(12px + env(safe-area-inset-bottom));display:flex;justify-content:center;pointer-events:none;opacity:0;visibility:hidden;transition:.2s}
+  .cartbar.show{opacity:1;visibility:visible}
+  .cartbar button{pointer-events:auto;width:100%;max-width:508px;display:flex;align-items:center;gap:12px;background:var(--rojo);color:#fff;border:none;border-radius:14px;padding:15px 18px;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 8px 26px rgba(228,50,43,.45)}
+  .cartbar .count{background:#fff;color:var(--rojo);min-width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:14px;font-weight:800}
+  .cartbar .total{margin-left:auto;font-family:var(--display);font-size:18px;letter-spacing:.5px}
+  .cartbar .arrow{font-size:19px}
+
+  /* Sheet */
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:50;opacity:0;visibility:hidden;transition:.2s}
+  .scrim.show{opacity:1;visibility:visible}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--negro-2);border-radius:22px 22px 0 0;border-top:3px solid var(--amarillo);max-width:540px;margin:0 auto;transform:translateY(100%);transition:transform .28s cubic-bezier(.3,.9,.3,1);max-height:92vh;display:flex;flex-direction:column}
+  .sheet.show{transform:translateY(0)}
+  .sheet-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 12px;border-bottom:1px solid var(--linea)}
+  .sheet-head h3{font-family:var(--display);font-size:20px;text-transform:uppercase;letter-spacing:.5px;color:var(--amarillo)}
+  .close{background:var(--negro-3);border:none;color:var(--crema);width:32px;height:32px;border-radius:9px;font-size:15px;cursor:pointer}
+  .sheet-body{padding:16px 18px calc(20px + env(safe-area-inset-bottom));overflow-y:auto}
+  .li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--linea)}
+  .li .lname{flex:1;font-size:13.5px;font-weight:600}
+  .li .lname small{display:block;color:var(--gris);font-weight:500;font-size:11.5px}
+  .li .lp{font-family:var(--display);font-size:14px;letter-spacing:.3px;min-width:56px;text-align:right}
+  .li .lp.consulta{font-family:var(--body);font-size:11px;font-weight:700;color:var(--amarillo)}
+  .li .mini{display:flex;align-items:center;gap:8px}
+  .li .mini button{background:var(--negro-3);border:1px solid var(--linea);color:var(--amarillo);width:26px;height:26px;border-radius:7px;font-size:16px;font-weight:700;cursor:pointer}
+  .li .mini .q{font-weight:800;min-width:14px;text-align:center;font-size:13px}
+  .empty{padding:26px 0;text-align:center;color:var(--gris);font-size:13px}
+  .empty b{display:block;color:var(--crema);margin-bottom:4px;font-size:15px}
+  .toggle{display:flex;gap:8px;margin:16px 0 4px}
+  .toggle button{flex:1;background:var(--negro-3);border:1.5px solid var(--linea);color:var(--crema);font-weight:700;font-size:13.5px;padding:11px;border-radius:11px;cursor:pointer}
+  .toggle button.on{background:var(--amarillo);border-color:var(--amarillo);color:var(--negro)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  .field{margin-top:12px}
+  .field.hide{display:none}
+  .field label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--gris);margin-bottom:6px}
+  .field input,.field textarea{width:100%;background:var(--negro-3);border:1.5px solid var(--linea);border-radius:10px;color:var(--crema);font-family:var(--body);font-size:14px;padding:11px 12px}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--amarillo)}
+  .field textarea{resize:vertical;min-height:56px}
+  .summary{margin-top:16px;background:var(--negro-3);border-radius:12px;padding:13px 15px}
+  .summary .row{display:flex;justify-content:space-between;font-size:13.5px;padding:3px 0;color:var(--crema)}
+  .summary .row.tot{border-top:1px solid var(--linea);margin-top:6px;padding-top:9px;font-family:var(--display);font-size:19px;letter-spacing:.5px;color:var(--amarillo)}
+  .summary .note{font-size:11px;color:var(--gris);margin-top:6px}
+  .err{color:#ff8a84;font-size:13px;margin-top:12px;display:none}
+  .err.show{display:block}
+  .send{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin-top:16px;background:var(--wa);color:#04301a;border:none;border-radius:13px;font-family:var(--body);font-weight:800;font-size:15.5px;padding:15px;cursor:pointer;box-shadow:0 6px 20px rgba(37,211,102,.35)}
+  .send:active{transform:translateY(1px)}
+  .hint{font-size:11.5px;color:var(--gris);text-align:center;margin-top:9px;line-height:1.4}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="bar">
+      <span class="seal">SUSHI<span>·</span>F</span>
+      <div class="brand"><b>Sushi Factory</b><span>Pali Sushi · Rancagua</span></div>
+      <span class="open">Abierto</span>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>Armá tu pedido.<br>Te llega <em>ordenadito</em> por WhatsApp.</h1>
+    <div class="meta">
+      <span class="pill">🛵 Delivery Rancagua y Machalí</span>
+      <span class="pill">🏠 Retiro · Millán 099</span>
+      <span class="pill">📲 <b>+569 9469 4021</b></span>
+    </div>
+  </div>
+
+  <nav><div class="chips" id="chips"></div></nav>
+  <main id="menu"></main>
+
+  <section class="faq" id="faq">
+    <h2>Preguntas frecuentes</h2>
+    <div id="faqList"></div>
+    <button class="askbtn" onclick="consultar()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2z"/></svg>
+      ¿Otra duda? Escríbenos
+    </button>
+  </section>
+
+  <footer>
+    <b>Sushi Factory (Pali Sushi)</b><br>
+    Millán 099, Población Isabel Riquelme, Rancagua<br>
+    Delivery Rancagua y Machalí · WhatsApp +569 9469 4021
+  </footer>
+</div>
+
+<div class="cartbar" id="cartbar">
+  <button id="openSheet">
+    <span class="count" id="barCount">0</span>
+    <span>Ver pedido</span>
+    <span class="total" id="barTotal">$0</span>
+    <span class="arrow">→</span>
+  </button>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="sheet-head">
+    <h3>Tu pedido</h3>
+    <button class="close" id="closeSheet">✕</button>
+  </div>
+  <div class="sheet-body">
+    <div id="lineItems"></div>
+    <div id="checkout">
+      <div class="toggle">
+        <button id="tgRetiro" class="on" onclick="setModo('retiro')">Retiro en local</button>
+        <button id="tgDelivery" onclick="setModo('delivery')">Delivery</button>
+      </div>
+      <div class="grid2">
+        <div class="field"><label for="nombre">Tu nombre</label><input id="nombre" type="text" placeholder="Ej: Juan Pérez" autocomplete="name"></div>
+        <div class="field"><label for="fono">WhatsApp</label><input id="fono" type="tel" placeholder="+56 9 ..." autocomplete="tel"></div>
+      </div>
+      <div class="field hide" id="fieldDir"><label for="direccion">Dirección de entrega</label><input id="direccion" type="text" placeholder="Calle, número, depto, sector, referencia"></div>
+      <div class="field"><label for="comentario">Comentario (opcional)</label><textarea id="comentario" placeholder="Ej: sin cebollín, tocar el timbre, etc."></textarea></div>
+      <div class="summary">
+        <div class="row"><span>Subtotal</span><span id="sumSub">$0</span></div>
+        <div class="row" id="rowDelivery" style="display:none"><span>Delivery</span><span id="sumDelivery">a coordinar</span></div>
+        <div class="row tot"><span>Total</span><span id="sumTotal">$0</span></div>
+        <div class="note" id="sumNote"></div>
+      </div>
+      <div class="err" id="formErr"></div>
+      <button class="send" onclick="enviarPedido()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#04301a"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2z"/></svg>
+        <span>Enviar pedido por WhatsApp</span>
+      </button>
+      <p class="hint">Se abre WhatsApp con tu pedido escrito. Solo lo envías y listo 🍣</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CONFIG — PALI EDITA ACÁ
+═══════════════════════════════════════════════════════════ */
+const WSP_NUMERO = "56994694021";        // número real (sin + ni espacios)
+const LOCAL = "Sushi Factory";
+// Delivery: pon un número (ej. 2000) para tarifa fija, o null = "a coordinar según sector"
+const DELIVERY_FEE = null;
+
+/* ═══ MENÚ REAL ═══ (price:null = "Consultar") */
+const MENU = [
+  { cat:"Promos", items:[
+    { id:"pr1", name:"Promo x2 Sushiburger", desc:"2 burgers pollo furay, queso crema, gauda, palta, tomate, salsa de ajo", price:13000 },
+    { id:"pr2", name:"Promo Gohan", desc:"Gohan de pollo, camarón o mixto", price:9980 },
+    { id:"pr3", name:"Promoción Gohan", desc:"Consultá qué incluye", price:14490 },
+  ]},
+  { cat:"Sushiburgers", sub:"Las burgers de sushi de la casa", items:[
+    { id:"b1", name:"Burger Pollo Furay", desc:"Pollo furay, queso crema, gauda, palta, tomate, cebollín, salsa de la casa", price:6990 },
+    { id:"b2", name:"Burger Vegie", desc:"Champiñón, palmito, quesos, palta, tomate, salsa de la casa", price:6990 },
+    { id:"b3", name:"Burger Churrasco", desc:"Churrasco, queso crema, gauda, palta, tomate, salsa de la casa", price:7990 },
+    { id:"b4", name:"Burger Camarón Furay", desc:"Camarón furay, quesos, palta, tomate, salsa de la casa", price:7990 },
+    { id:"b5", name:"Burger Salmón Furay", desc:"Salmón, quesos, palta, tomate, salsa de la casa", price:7990 },
+    { id:"b6", name:"Burger Camarón Pollo Furay", desc:"Camarón y pollo furay, quesos, palta, tomate, salsa de la casa", price:8490 },
+    { id:"b7", name:"Burger Salmón Camarón Furay", desc:"Salmón y camarón furay, quesos, palta, tomate, salsa de la casa", price:8990 },
+  ]},
+  { cat:"Handrolls", sub:"Cono, 1 unidad", items:[
+    { id:"h1", name:"Handroll Pollo", desc:"Pollo, queso y cebollín", price:2990 },
+    { id:"h2", name:"Hand Roll Camarón", desc:"Camarón, queso, cebollín o palta", price:3490 },
+    { id:"h3", name:"Hand Roll Kanikama", desc:"Kanikama, queso y cebollín", price:2490 },
+  ]},
+  { cat:"Rolls", items:[
+    { id:"r1", name:"Roll Salmón", desc:"Elegí tu roll de salmón", price:4490 },
+    { id:"r2", name:"Roll Pollo", desc:"Elegí tu roll de pollo", price:null },
+    { id:"r3", name:"Roll Kanikama", desc:"Elegí tu roll de kanikama", price:null },
+    { id:"r4", name:"Roll Camarón", desc:"Elegí tu roll de camarón", price:null },
+  ]},
+  { cat:"Acompañamientos", items:[
+    { id:"a1", name:"Gyosas Pollo", desc:"5 unidades", price:4490 },
+    { id:"a2", name:"Bombastic", desc:"3 unidades", price:3990 },
+    { id:"a3", name:"Acevichado", desc:"Porción 8 oz, alcanza pa 3 rolls", price:2990 },
+    { id:"a4", name:"Furay Pollo/Camarón", desc:"Agregado furay a tu roll", price:1500 },
+    { id:"a5", name:"Teriyaki 2 oz", desc:"Salsa teriyaki hecha en casa", price:800 },
+    { id:"a6", name:"Palta Relleno", desc:"Agregado de palta", price:500 },
+  ]},
+  { cat:"Bebidas", items:[
+    { id:"d1", name:"Pepsi", desc:"", price:1000 },
+    { id:"d2", name:"Pepsi Zero", desc:"", price:1000 },
+    { id:"d3", name:"Bilz", desc:"", price:1000 },
+    { id:"d4", name:"Pap", desc:"", price:1000 },
+    { id:"d5", name:"Kem", desc:"", price:1000 },
+    { id:"d6", name:"Crush", desc:"", price:1000 },
+    { id:"d7", name:"Limón Soda", desc:"", price:1000 },
+  ]},
+];
+
+/* ═══ PREGUNTAS FRECUENTES ═══
+   PALI: revisá y editá las respuestas marcadas. Varias son un ejemplo
+   plausible; poné tus datos reales (horario, delivery, pagos, mínimo). */
+const FAQS = [
+  { q:"¿Hacen delivery? ¿A qué sectores llegan?",
+    a:"Sí, repartimos en Rancagua y Machalí. Si tu sector queda un poco más lejos, escríbenos y lo confirmamos al toque. (Pali: confirmá cobertura.)" },
+  { q:"¿Cuánto cuesta el despacho?",
+    a:"El costo del delivery se coordina según tu sector al momento de confirmar el pedido. (Pali: si tenés tarifa fija, ponela acá.)" },
+  { q:"¿Cuánto se demoran en llegar?",
+    a:"Normalmente entre 40 y 60 minutos, según la demanda del momento. (Pali: ajustá el tiempo real.)" },
+  { q:"¿Cuál es el horario de atención?",
+    a:"Atendemos de martes a domingo, de 19:00 a 23:30 hrs. (Pali: poné tus días y horario reales.)" },
+  { q:"¿Cómo puedo pagar?",
+    a:"Efectivo, transferencia y tarjeta al momento de la entrega. (Pali: confirmá cuáles aceptás y, si querés, dejá los datos de transferencia.)" },
+  { q:"¿Puedo retirar en el local?",
+    a:"Sí, podés retirar en Millán 099, Población Isabel Riquelme, Rancagua. Elegí 'Retiro en local' al hacer tu pedido." },
+  { q:"¿Tienen pedido mínimo para delivery?",
+    a:"(Pali: confirmá si tenés un mínimo, por ejemplo $6.000 para delivery. Si no tenés, borrá esta pregunta.)" },
+  { q:"¿Tienen opciones sin pescado o vegetarianas?",
+    a:"Sí. Tenemos la Burger Vegie (champiñón y palmito) y rolls con pollo, kanikama o veggie. Consultanos y te recomendamos." },
+  { q:"¿Puedo agendar un pedido para más tarde?",
+    a:"(Pali: confirmá si tomás pedidos con hora agendada. Si sí, explicá cómo.)" },
+];
+
+/* ═══ ESTADO ═══ */
+const byId = {}; MENU.forEach(c=>c.items.forEach(i=>byId[i.id]=i));
+const cart = {};
+let modo = "retiro";
+const $ = s => document.querySelector(s);
+const clp = n => "$"+Number(n).toLocaleString("es-CL");
+const hasConsulta = () => Object.keys(cart).some(id=>byId[id].price==null);
+
+/* ═══ RENDER MENÚ ═══ */
+function renderChips(){
+  const c=$("#chips"); c.innerHTML="";
+  MENU.forEach((cat,i)=>{
+    const el=document.createElement("div");
+    el.className="chip"+(i===0?" on":""); el.textContent=cat.cat;
+    el.onclick=()=>{ document.querySelectorAll(".chip").forEach(x=>x.classList.remove("on")); el.classList.add("on");
+      document.getElementById("cat-"+i).scrollIntoView({behavior:"smooth",block:"start"}); };
+    c.appendChild(el);
+  });
+  const f=document.createElement("div"); f.className="chip"; f.textContent="Preguntas";
+  f.onclick=()=>$("#faq").scrollIntoView({behavior:"smooth"}); c.appendChild(f);
+}
+function renderMenu(){
+  const m=$("#menu"); m.innerHTML="";
+  MENU.forEach((cat,i)=>{
+    const sec=document.createElement("section"); sec.className="cat"; sec.id="cat-"+i;
+    sec.innerHTML=`<h2>${cat.cat}</h2>${cat.sub?`<div class="sub">${cat.sub}</div>`:""}`;
+    cat.items.forEach(it=>{
+      const row=document.createElement("div"); row.className="item";
+      const priceHtml = it.price==null ? `<span class="p consulta">Consultar</span>` : `<div class="p">${clp(it.price)}</div>`;
+      row.innerHTML=`<div class="info"><div class="n">${it.name}</div>${it.desc?`<div class="d">${it.desc}</div>`:""}${priceHtml}</div><div class="ctrl" id="ctrl-${it.id}"></div>`;
+      sec.appendChild(row);
+    });
+    m.appendChild(sec);
+  });
+  MENU.forEach(c=>c.items.forEach(i=>renderCtrl(i.id)));
+}
+function renderCtrl(id){
+  const box=document.getElementById("ctrl-"+id); if(!box)return;
+  const q=cart[id]||0;
+  box.innerHTML = q===0
+    ? `<button class="addbtn" onclick="add('${id}')">+</button>`
+    : `<div class="stepper"><button onclick="dec('${id}')">−</button><span class="q">${q}</span><button onclick="add('${id}')">+</button></div>`;
+}
+
+/* ═══ CARRITO ═══ */
+function add(id){ cart[id]=(cart[id]||0)+1; renderCtrl(id); sync(); }
+function dec(id){ if(!cart[id])return; cart[id]--; if(cart[id]<=0)delete cart[id]; renderCtrl(id); sync(); renderLineItems(); }
+const count=()=>Object.values(cart).reduce((a,b)=>a+b,0);
+const subtotal=()=>Object.entries(cart).reduce((a,[id,q])=>a+(byId[id].price||0)*q,0);
+function sync(){
+  const n=count();
+  $("#barCount").textContent=n; $("#barTotal").textContent=clp(subtotal());
+  $("#cartbar").classList.toggle("show",n>0);
+  $("#sumSub").textContent=clp(subtotal());
+  const showDel = modo==="delivery";
+  $("#rowDelivery").style.display=showDel?"flex":"none";
+  if(showDel) $("#sumDelivery").textContent = DELIVERY_FEE==null ? "a coordinar" : clp(DELIVERY_FEE);
+  const tot = subtotal() + (showDel && DELIVERY_FEE ? DELIVERY_FEE : 0);
+  $("#sumTotal").textContent = clp(tot) + ((showDel&&DELIVERY_FEE==null)?" + delivery":"");
+  let note="";
+  if(hasConsulta()) note="* Algunos ítems (rolls a consultar) se confirman por WhatsApp.";
+  if(showDel&&DELIVERY_FEE==null) note+=(note?" ":"")+"El costo de delivery se coordina según tu sector.";
+  $("#sumNote").textContent=note;
+}
+function renderLineItems(){
+  const box=$("#lineItems"); const ids=Object.keys(cart);
+  const co=$("#checkout");
+  if(ids.length===0){ box.innerHTML=`<div class="empty"><b>Tu pedido está vacío</b>Agregá algo rico de la carta 🍣</div>`; co.style.display="none"; return; }
+  co.style.display="block";
+  box.innerHTML="";
+  ids.forEach(id=>{
+    const i=byId[id], q=cart[id];
+    const lp = i.price==null ? `<span class="lp consulta">a confirmar</span>` : `<span class="lp">${clp(i.price*q)}</span>`;
+    const el=document.createElement("div"); el.className="li";
+    el.innerHTML=`<div class="lname">${i.name}${i.price==null?"<small>precio a confirmar</small>":""}</div>
+      <div class="mini"><button onclick="decLI('${id}')">−</button><span class="q">${q}</span><button onclick="addLI('${id}')">+</button></div>${lp}`;
+    box.appendChild(el);
+  });
+}
+function addLI(id){ add(id); renderLineItems(); }
+function decLI(id){ dec(id); }
+
+/* ═══ SHEET ═══ */
+function openSheet(){ renderLineItems(); sync(); $("#sheet").classList.add("show"); $("#scrim").classList.add("show"); document.body.style.overflow="hidden"; }
+function closeSheet(){ $("#sheet").classList.remove("show"); $("#scrim").classList.remove("show"); document.body.style.overflow=""; }
+function setModo(m){ modo=m; $("#tgRetiro").classList.toggle("on",m==="retiro"); $("#tgDelivery").classList.toggle("on",m==="delivery"); $("#fieldDir").classList.toggle("hide",m!=="delivery"); sync(); }
+
+/* ═══ ENVIAR PEDIDO ═══ */
+function enviarPedido(){
+  const nombre=$("#nombre").value.trim(), fono=$("#fono").value.trim(),
+        dir=$("#direccion").value.trim(), comentario=$("#comentario").value.trim();
+  const err=$("#formErr"); let problema="";
+  if(count()===0) problema="Tu pedido está vacío.";
+  else if(!nombre) problema="Escribí tu nombre.";
+  else if(modo==="delivery"&&!dir) problema="Necesitamos tu dirección para el delivery.";
+  else if(!fono) problema="Dejanos tu WhatsApp por si hay que confirmar.";
+  if(problema){ err.textContent=problema; err.classList.add("show"); return; }
+  err.classList.remove("show");
+
+  let msg=`*Nuevo pedido — ${LOCAL}* 🍣\n\n👤 ${nombre}\n📞 ${fono}\n`;
+  msg+= modo==="delivery" ? `🛵 Delivery — ${dir}\n` : `🏠 Retiro en local\n`;
+  msg+=`\n🧾 Pedido:\n`;
+  Object.entries(cart).forEach(([id,q])=>{
+    const i=byId[id];
+    msg+= i.price==null ? `• ${q}× ${i.name} — a confirmar\n` : `• ${q}× ${i.name} — ${clp(i.price*q)}\n`;
+  });
+  if(comentario) msg+=`\n📝 ${comentario}\n`;
+  msg+=`\nSubtotal: ${clp(subtotal())}\n`;
+  if(modo==="delivery") msg+= DELIVERY_FEE==null ? `Delivery: a coordinar\n` : `Delivery: ${clp(DELIVERY_FEE)}\n`;
+  const tot=subtotal()+(modo==="delivery"&&DELIVERY_FEE?DELIVERY_FEE:0);
+  msg+=`*Total: ${clp(tot)}${(modo==="delivery"&&DELIVERY_FEE==null)?" + delivery":""}*\n`;
+  if(hasConsulta()) msg+=`\n(*) Rolls marcados "a confirmar": me confirman el precio porfa.\n`;
+  msg+=`\nPago: (a coordinar)`;
+
+  window.open(`https://wa.me/${WSP_NUMERO}?text=${encodeURIComponent(msg)}`,"_blank");
+}
+function consultar(){ window.open(`https://wa.me/${WSP_NUMERO}?text=${encodeURIComponent("Hola Sushi Factory 👋 tengo una consulta:")}`,"_blank"); }
+
+/* ═══ FAQ ═══ */
+function renderFAQ(){
+  const box=$("#faqList"); box.innerHTML="";
+  FAQS.forEach((f,i)=>{
+    const el=document.createElement("div"); el.className="qitem";
+    el.innerHTML=`<div class="qhead" onclick="this.parentElement.classList.toggle('open')"><span>${f.q}</span><span class="ic">+</span></div><div class="qbody"><p>${f.a}</p></div>`;
+    box.appendChild(el);
+  });
+}
+
+/* ═══ INIT ═══ */
+renderChips(); renderMenu(); renderFAQ(); renderLineItems(); sync();
+$("#openSheet").onclick=openSheet; $("#closeSheet").onclick=closeSheet; $("#scrim").onclick=closeSheet;
+document.addEventListener("keydown",e=>{ if(e.key==="Escape")closeSheet(); });
+</script>
+</body>
+</html>
